@@ -3,11 +3,12 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/exponent-io/jsonpath"
-	"github.com/thoj/go-ircevent"
 	"os"
 	"strings"
 	"sync"
+
+	"github.com/exponent-io/jsonpath"
+	"github.com/thoj/go-ircevent"
 )
 
 const channel = "#rtk"
@@ -19,11 +20,12 @@ var dictionaries = [...]string{
 	"kotowaza",
 	"meikyou",
 }
+var irccon *irc.Connection
 
 func main() {
 	// Init
 	nickname := "kareebot"
-	irccon := irc.IRC(nickname, "coco")
+	irccon = irc.IRC(nickname, "coco")
 	irccon.VerboseCallbackHandler = true
 	irccon.Debug = true
 	irccon.UseTLS = true
@@ -63,9 +65,9 @@ func jjLookup(event *irc.Event) {
 					if err != nil {
 						fmt.Printf("ERROR: %s\n", err)
 
-						failedLock.WLock()
+						failedLock.Lock()
 						failed++
-						failedLock.WUnlock()
+						failedLock.Unlock()
 
 						wg.Done()
 						return
@@ -73,9 +75,9 @@ func jjLookup(event *irc.Event) {
 
 					// Not found
 					if result == "" {
-						failedLock.WLock()
+						failedLock.Lock()
 						failed++
-						failedLock.WUnlock()
+						failedLock.Unlock()
 
 						wg.Done()
 						return
