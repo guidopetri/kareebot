@@ -1,0 +1,8 @@
+hash: 47bbfd8910e61b30edf852340f1c17185dae6995c90c05fd6ca9f34fece40540
+updated: 2017-06-06T23:27:38.661437491+09:00
+imports:
+- name: github.com/exponent-io/jsonpath
+  version: d6023ce2651d8eafb5c75bb0c7167536102ec9f5
+- name: github.com/thoj/go-ircevent
+  version: a6b1561a016c2a4aae183c3ef152c25d134c095d
+testImports: []

@@ -1,0 +1,5 @@
+package: github.com/antonve/kareebot
+import:
+- package: github.com/thoj/go-ircevent
+  version: ^0.1.0
+- package: github.com/exponent-io/jsonpath
