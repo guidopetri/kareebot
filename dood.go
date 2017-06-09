@@ -1,15 +1,15 @@
 package main
 
 import (
-  "bufio"
-  "fmt"
-  "os"
-  "io"
-  "strings"
-  "strconv"
-  "sync"
+	"bufio"
+	"fmt"
+	"io"
+	"os"
+	"strconv"
+	"strings"
+	"sync"
 
-  "github.com/thoj/go-ircevent"
+	"github.com/thoj/go-ircevent"
 )
 
 var lock sync.Mutex
@@ -19,61 +19,67 @@ func DoodCommand(event *irc.Event) {
 	go func(event *irc.Event) {
 		// Split message into tokens
 		tokens := strings.Fields(event.Message())
+		channel := event.Arguments[0]
 
-		if tokens[0] == "!dood" {
-      irccon.Privmsg("#rtk", fmt.Sprintf("dood counter: %d", getDoodCounter()))
-      return
+		if channel != "#rtk" {
+			return
 		}
 
-    raw := strings.ToLower(event.Message())
-    count := strings.Count(raw, "dood")
+		if tokens[0] == "!dood" {
+			irccon.Privmsg("#rtk", fmt.Sprintf("dood counter: %d", getDoodCounter()))
+			return
+		}
 
-    if count > 0 {
-      incrementDoodCounter(count)
-    }
+		raw := strings.ToLower(event.Message())
+		count := strings.Count(raw, "dood")
+
+		if count > 0 {
+			fmt.Printf("dooded: %d", count)
+			incrementDoodCounter(count)
+		}
 
 	}(event)
 }
 
 func incrementDoodCounter(addedDoods int) bool {
-  count := getDoodCounter()
+	count := getDoodCounter()
 
-  lock.Lock()
-  defer lock.Unlock()
+	lock.Lock()
+	defer lock.Unlock()
 
-  f, err := os.Create(doodPath)
-  if err != nil {
-    fmt.Println(err)
-    return false
-  }
-  defer f.Close()
+	f, err := os.Create(doodPath)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+	defer f.Close()
 
-  io.WriteString(f, fmt.Sprintf("%d", count + addedDoods))
+	io.WriteString(f, fmt.Sprintf("%d", count+addedDoods))
 
-  return true
+	return true
 }
 
 func getDoodCounter() int {
-  lock.Lock()
-  defer lock.Unlock()
+	lock.Lock()
+	defer lock.Unlock()
 
-  f, err := os.Open(doodPath)
-  if err != nil {
-    fmt.Println(err)
-    os.Create(doodPath)
-    return 0
-  }
-  defer f.Close()
+	f, err := os.Open(doodPath)
+	if err != nil {
+		fmt.Println(err)
+		os.Create(doodPath)
+		return 0
+	}
+	defer f.Close()
 
-  scanner := bufio.NewScanner(f)
-  scanner.Split(bufio.ScanLines)
+	scanner := bufio.NewScanner(f)
+	scanner.Split(bufio.ScanLines)
 
-  scanner.Scan()
-  c, err := strconv.Atoi(scanner.Text())
-  if err != nil {
-    fmt.Println(err)
-    return 0
-  }
+	scanner.Scan()
+	c, err := strconv.Atoi(scanner.Text())
+	if err != nil {
+		fmt.Println(err)
+		return 0
+	}
 
-  return c
+	return c
 }
