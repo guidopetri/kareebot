@@ -26,6 +26,7 @@ func main() {
 	irccon.AddCallback("PRIVMSG", JJLookupCommand)
 	irccon.AddCallback("PRIVMSG", TobuCommand)
 	irccon.AddCallback("PRIVMSG", DoodCommand)
+	irccon.AddCallback("KICK", RejoinCommand)
 
 	err := irccon.Connect(serverssl)
 
