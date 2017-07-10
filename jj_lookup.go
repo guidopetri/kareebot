@@ -1,13 +1,14 @@
 package main
 
 import (
-  "fmt"
-  "os"
-  "strings"
-  "sync"
+	"fmt"
+	"os"
+	"path"
+	"strings"
+	"sync"
 
-  "github.com/exponent-io/jsonpath"
-  "github.com/thoj/go-ircevent"
+	"github.com/exponent-io/jsonpath"
+	"github.com/thoj/go-ircevent"
 )
 
 var dictionaries = [...]string{
@@ -76,7 +77,16 @@ func JJLookupCommand(event *irc.Event) {
 // with structure `"word": "definition"`
 func findInDictionary(word string, dictionary string) (string, error) {
 	var result string
-	file, e := os.Open(fmt.Sprintf("./dicts/%s.json", dictionary))
+
+	executable, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	executablePath := path.Dir(executable)
+	dictionaryPath := fmt.Sprintf("%s/dicts/%s.json", executablePath, dictionary)
+
+	fmt.Println(dictionaryPath)
+	file, e := os.Open(dictionaryPath)
 
 	if e != nil {
 		return "", fmt.Errorf("file error: %v\n", e)
