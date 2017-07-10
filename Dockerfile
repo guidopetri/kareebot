@@ -12,5 +12,8 @@ RUN curl https://glide.sh/get | sh
 RUN cd /go/src/github.com/antonve/kareebot && glide install
 RUN go install github.com/antonve/kareebot
 
+# Move dictionaries to where the binary expects them
+RUN mv /go/src/github.com/antonve/kareebot/dicts /go/bin/dicts
+
 # Run the outyet command by default when the container starts.
 ENTRYPOINT /go/bin/kareebot
