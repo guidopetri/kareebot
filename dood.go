@@ -25,6 +25,11 @@ func DoodCommand(event *irc.Event) {
 			return
 		}
 
+		if len(tokens) == 0 {
+			irccon.Privmsg("#rtk", "credits go to karageko for reporting a bug that crashes kareebot in this scenario")
+			return
+		}
+
 		if tokens[0] == "!dood" {
 			irccon.Privmsg("#rtk", fmt.Sprintf("dood counter: %d", getDoodCounter()))
 			return
