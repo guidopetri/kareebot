@@ -23,6 +23,10 @@ func JJLookupCommand(event *irc.Event) {
 		// Split message into tokens
 		tokens := strings.Fields(event.Message())
 
+		if len(tokens) == 0 {
+			return
+		}
+
 		if tokens[0] == "!jj" && len(tokens) == 2 {
 			failed := 0
 			var wg = sync.WaitGroup{}

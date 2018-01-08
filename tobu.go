@@ -1,16 +1,20 @@
 package main
 
 import (
-  "fmt"
-  "strings"
+	"fmt"
+	"strings"
 
-  "github.com/thoj/go-ircevent"
+	"github.com/thoj/go-ircevent"
 )
 
 func TobuCommand(event *irc.Event) {
 	go func(event *irc.Event) {
 		// Split message into tokens
 		tokens := strings.Fields(event.Message())
+
+		if len(tokens) == 0 {
+			return
+		}
 
 		if tokens[0] != "!tobu" {
 			return
