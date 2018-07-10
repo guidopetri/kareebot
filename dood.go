@@ -34,6 +34,11 @@ func DoodCommand(event *irc.Event) {
 			irccon.Privmsg("#rtk", fmt.Sprintf("dood counter: %d", getDoodCounter()))
 			return
 		}
+		
+		if tokens[0] == "!baka" {
+			irccon.Privmsg("#rtk", fmt.Sprintf("karageko b-baka!"))
+			return
+		}
 
 		raw := strings.ToLower(event.Message())
 		count := strings.Count(raw, "dood")
